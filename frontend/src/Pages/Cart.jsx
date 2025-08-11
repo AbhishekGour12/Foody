@@ -5,16 +5,15 @@ import url from '../misc/url.js'
 import { FaRupeeSign } from 'react-icons/fa'
 import { dishCount } from '../feature/cart.js'
 import { setCartDetail } from '../feature/cartDetail.js'
+import { useLoadScript } from '@react-google-maps/api'
 export default function Cart() {
     let address = useSelector((state) => state.location.value);
     let user = useSelector((state) => state.name.value);
-    let cart = useSelector((state) => state.cartDetail.value);
+    let data = useSelector((state) => state.cartDetail.value);
+   
     const dispatch = useDispatch()
-    console.log(cart)
-
-
-    
-
+   const [cart, setCart] = useState(null);
+const [loading, setLoading] = useState(true)
     function btn(e){
         document.getElementById('wallet-icon').style.backgroundColor = "black";
         document.querySelector('.payment-text').style.display = "none";
@@ -26,13 +25,13 @@ export default function Cart() {
       
 
         let obj = {
-            dish: data,
+            dish: cart.data,
             username: user.name,
             email: user.email,
             address: user.address,
             phone: user.phone,
-            price: total,
-            restaurant: restaurant
+            price: cart.total,
+            restaurant: cart.restaurant
 
 
         }
@@ -51,11 +50,13 @@ export default function Cart() {
                 localStorage.removeItem(Element.dish_id);
                 
 
-               })
-               localStorage.setItem("count", 0);
+               });
+                 localStorage.setItem("count", 0);
                dispatch(dishCount(0))
 
-              dispatch(setCartDetail(''));
+              dispatch(setCartDetail([]));
+        
+               
               
            document.querySelector('.payment-text').style.display = "block";
            document.querySelector('.payment-btn').style.display = "none";
@@ -72,31 +73,40 @@ export default function Cart() {
 		  };
         const rzp =  new window.Razorpay(options)
 		rzp.open();
-        
+       
 
     }
-    let dish = async() =>{
-               
-               let token = localStorage.getItem("token");
-               console.log(token)
-               try{
-               let result = await axios.get(`${url}cartDetail/${token}/cartDetail/${token}`);
-               console.log(result)
-               if(result.data.success){
-                   dispatch(setCartDetail({data: result.data.dish, restaurant: result.data.restaurant, total: result.data.total}))
-                   console.log(cart)
-                 
-                 
-               }else{
-                dispatch(setCartDetail(''))
-               }
-           }catch(err){
-               console.log(err.message)
-           }
-       
-           }
+   let dish = async () => {
+  let token = localStorage.getItem("token");
+  setLoading(true); // start loading
+
+  try {
+    let result = await axios.get(`${url}cartDetail/${token}/cartDetail/${token}`);
+    if (result.data.success) {
+      dispatch(setCartDetail({
+        data: result.data.dish,
+        restaurant: result.data.restaurant,
+        total: result.data.total
+      }));
+      setCart({
+        data: result.data.dish,
+        restaurant: result.data.restaurant,
+        total: result.data.total
+      });
+    } else {
+      setCart({ data: [] }); // empty cart
+    }
+  } catch (err) {
+    console.log(err.message);
+    setCart({ data: [] });
+  } finally {
+    setLoading(false); // stop loading
+  }
+};
+
            useEffect(() =>{
                dish();
+               
        
            },[])
        
@@ -136,7 +146,7 @@ export default function Cart() {
     </div>
     <div className='p-3 payment-btn hidden'>
     <div className='text-lg font-bold'>Choose Payment Method</div>
-    <button className='text-lg font-bold h-10 text-white bg-green-600 mt-6 w-full' style={{backgroundColor: "rgb(27,166,114)"}} onClick = {payment} disabled={cart.data?false:true} >
+    <button className='text-lg font-bold h-10 text-white bg-green-600 mt-6 w-full' style={{backgroundColor: "rgb(27,166,114)"}} onClick = {payment} disabled={cart?cart.data?false:true:false} >
         Proceed to Pay
     </button>
 
@@ -145,8 +155,12 @@ export default function Cart() {
     </div>
 
     </div>
-    {
-        cart?
+   {
+  loading ? (
+    <div className='col-md flex justify-center items-center text-lg font-bold'>
+      Loading your cart...
+    </div>
+  ) : cart && cart.data && cart.data.length > 0 ? (
             <div className='col-md bg-white p-3 ' >
     <div className='flex'>
     <div className='w-16 h-16'>
@@ -225,12 +239,12 @@ export default function Cart() {
 
 
     </div>
-:<div className='col-md flex justify-center items-center text-lg font-bold'>
-    No Item in cart
-</div>
-
-
-    }
+ ) : (
+    <div className='col-md flex justify-center items-center text-lg font-bold'>
+      No Item in cart
+    </div>
+  )
+}
     
     <div className='absolute w-fit'>
     <i class="fa-solid fa-location-pin border text-lg    w-9 h-9 mt-3 text-white bg-black flex justify-center items-center"></i>

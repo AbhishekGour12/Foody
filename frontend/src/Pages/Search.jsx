@@ -161,7 +161,7 @@ export default function Search() {
     useEffect(() => {
         dispatch(dishCount(count));
         localStorage.setItem('count', count);
-        cartDetail()
+        
     }, [count]);
 
     function restaurant(id) {
@@ -173,15 +173,13 @@ export default function Search() {
            let token = localStorage.getItem("token");
            console.log(token)
            try{
-           let result = await axios.get(`${url}cartDetail/${token}/cartDetail/${token}`);
-           console.log(result)
-           if(result.data.success){
-               dispatch(setCartDetail({data: result.data.dish, restaurant: result.data.restaurant, total: result.data.total}))
+           let result1 = await axios.get(`${url}cartDetail/${token}/cartDetail/${token}`);
+           console.log(result1)
+           if(result1.data.success){
+               dispatch(setCartDetail({data: result1.data.dish, restaurant: result1.data.restaurant, total: result1.data.total}))
               
              
              
-           }else{
-            dispatch(setCartDetail(''))
            }
        }catch(err){
            console.log(err.message)

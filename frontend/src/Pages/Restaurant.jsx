@@ -10,6 +10,7 @@ import { dishCount } from '../feature/cart';
 import { FaHeart, FaRegHeart, FaStar, FaRupeeSign, FaSearch } from 'react-icons/fa';
 import { MdOutlineDeliveryDining } from 'react-icons/md';
 import { IoLocationOutline } from 'react-icons/io5';
+import { setCartDetail } from '../feature/cartDetail.js';
 
 
 export default function Restaurant() {
@@ -104,6 +105,7 @@ export default function Restaurant() {
       localStorage.setItem(dish_id, newQty);
       setQuantities(prev => ({ ...prev, [dish_id]: newQty }));
       setCount(prev => prev + 1);
+      cartDetail()
     }
   };
 
@@ -130,6 +132,7 @@ export default function Restaurant() {
       if (newQty > 0) {
         localStorage.setItem(dish_id, newQty);
         setQuantities(prev => ({ ...prev, [dish_id]: newQty }));
+       cartDetail() 
       } else {
         localStorage.removeItem(dish_id);
         setQuantities(prev => {
@@ -168,6 +171,24 @@ export default function Restaurant() {
 
 
   }
+   let cartDetail = async() =>{
+           
+           let token = localStorage.getItem("token");
+           console.log(token)
+           try{
+           let result1 = await axios.get(`${url}cartDetail/${token}/cartDetail/${token}`);
+           console.log(result1)
+           if(result1.data.success){
+               dispatch(setCartDetail({data: result1.data.dish, restaurant: result1.data.restaurant, total: result1.data.total}))
+              
+             
+             
+           }
+       }catch(err){
+           console.log(err.message)
+       }
+   
+       }
 
   return (
     <>
