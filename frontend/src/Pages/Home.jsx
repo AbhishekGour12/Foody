@@ -42,9 +42,9 @@ export default function Home() {
         <div className="relative">
           <div className="absolute -top-6 -left-6 w-32 h-32 bg-orange-300 rounded-full opacity-50"></div>
           <div className="absolute -bottom-6 -right-6 w-40 h-40 bg-orange-200 rounded-full opacity-50"></div>
-          <div className="relative bg-white rounded-2xl shadow-xl p-2">
+          <div className="relative  rounded-2xl shadow-xl p-2">
             <img
-              src="https://images.unsplash.com/photo-1600891963937-c9e50d3d1f94?auto=format&fit=crop&w=600&q=80"
+              src="https://images.unsplash.com/photo-1571091718767-18b5b1457add?q=80&w=2072&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
               alt="Delicious food"
               className="rounded-xl w-64 h-64 object-cover"
             />
@@ -55,7 +55,6 @@ export default function Home() {
   </div>
 </div>
 
-      </div>
 
       <div className="max-w-6xl mx-auto px-4 py-8">
         {/* Food Categories */}
