@@ -84,7 +84,7 @@ export default function Navbar({login, profile, logout}) {
     <div className='   m-auto'>
     <div className='flex h-full items-center justify-between'>
     <div className='logo max-lg:pl-3'>
-    <Link to ="/"><img src = {logo} className=' h-10 w-32 hover:h-11 '/> </Link> 
+    <Link to ="/"><img src = "/logo.png" className=' h-10 w-32 hover:h-11 '/> </Link> 
 
     </div>
     <div className='address text-lg font-semibold text-gray-400 max-lg:hidden hover:cursor-pointer flex items-center' onClick={() =>{
@@ -94,7 +94,7 @@ export default function Navbar({login, profile, logout}) {
     <MdLocationOn className='text-orange-600'/> <span>{location.substr(0, 30) + '...'}</span>
     </div>
     <div className='flex h-full items-center  max-lg:hidden no-underline'>
-    <i class="fa-solid fa-bag-shopping mr-3 text-gray-600 "></i><Link to = '/corporate' className=' text-gray-500 font-semibold hover:text-orange-600  hover:no-underline  '>Foody Corporate</Link>
+    <i class="fa-solid fa-bag-shopping mr-3 text-gray-600 "></i><Link to = '/corporate' className=' text-gray-500 font-semibold hover:text-orange-600  hover:no-underline  '>Feastify Corporate</Link>
 
     </div>
     <div className='search flex h-full items-center  max-lg:hidden'>
